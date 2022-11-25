@@ -13,7 +13,7 @@ const gameBoard = (() => {
         displayGameBoard.updateCells();
     };
 
-    const getGameBoard = function () {
+    const getGameBoard = () => {
         return gameBoard;
     };
 
@@ -33,11 +33,12 @@ const player = (name) => {
 // game module
 const game = ((name1, name2) => {
     const $gameBoard = document.querySelector(".gameBoard");
+    const $winner = document.querySelector("h1");
     const player1 = player(name1);
     const player2 = player(name2);
     let round = 0;
 
-    const checkWinner = function () {
+    const checkWinner = () => {
         const winnerCombos = [
             [0, 1, 2],
             [3, 4, 5],
@@ -55,7 +56,7 @@ const game = ((name1, name2) => {
                 return true;
             }
         };
-        function allSameSymbol(combo) {
+        const allSameSymbol = (combo) => {
             return combo.every((item) => {
                 if (round % 2 === 0) {
                     return gameBoard.valueAt(item) === "x";
@@ -63,18 +64,23 @@ const game = ((name1, name2) => {
                     return gameBoard.valueAt(item) === "0";
                 }
             });
-        }
+        };
         if (gameWon()) {
-            console.log("winner");
+            if (round % 2 === 0) {
+                $winner.innerText = `${player1.getPlayerName()} won`;
+            } else {
+                $winner.innerText = `${player2.getPlayerName()} won`;
+            }
         } else if (gameTie()) {
-            console.log("tie");
+            $winner.innerText = "It's a tie";
         } else {
             console.log("no winner yet");
         }
+        return { gameWon, gameTie };
     };
 
     $gameBoard.addEventListener("click", (e) => {
-        if (e.target.textContent === "") {
+        if (e.target.innerText === "" && $winner.innerText === "") {
             if (round % 2 === 0) {
                 gameBoard.updateGameBoard(e.target.dataset.id, "x");
                 checkWinner();
