@@ -11,7 +11,7 @@ body {
     grid-template-rows: 1fr 1fr 1fr;
 }
 
-.box {
+.cell {
     border: 1px solid black;
     border-radius: 10px;
     margin: 5px;
@@ -28,7 +28,7 @@ body {
     font-size: 2rem;
 }
 
-.box:hover {
+.cell:hover {
     transform: scale(1.1);
     background-color: aliceblue;
 }
