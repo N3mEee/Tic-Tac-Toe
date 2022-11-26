@@ -122,7 +122,7 @@ const game = (() => {
                 checkWinner();
             } else {
                 gameBoard.updateGameBoard(e.target.dataset.id, "0");
-                $roundAnnouncement.textContent = `${player1.getPlayerName()}'s turn (X)`;
+                $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
                 checkWinner();
             }
             round++;
