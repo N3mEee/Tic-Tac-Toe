@@ -89,7 +89,6 @@ const game = (() => {
     // Create a new game (create players and gameBoard)
     $newGameBtn.forEach((item) => {
         item.addEventListener("click", (e) => {
-            console.log(e);
             const $form = document.querySelector("form");
             if (e.target.dataset.id === "0") {
                 e.preventDefault();
