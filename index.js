@@ -109,7 +109,9 @@ const game = (() => {
                     gameBoard.updateGameBoard(i, "");
                 }
                 player1 = null;
+                $player1.value = ""
                 player2 = null;
+                $player2.value = ""
                 display.deleteBoard();
                 $form.style.display = "flex";
                 $resetGame.style.display = "none";
