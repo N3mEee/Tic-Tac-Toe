@@ -30,8 +30,9 @@ const game = (() => {
     const $gameBoard = document.querySelector(".gameBoard");
     const $player1 = document.querySelector("#player1");
     const $player2 = document.querySelector("#player2");
-    const $newGameBtn = document.querySelector(".new-game");
+    const $newGameBtn = document.querySelectorAll(".new-game");
     const $winner = document.querySelector("h1");
+    const $roundAnnouncement = document.querySelector("h2");
     let player1;
     let player2;
     let round = 0;
@@ -62,38 +63,55 @@ const game = (() => {
                 }
             });
         };
-        if (gameWon()) {
-            if (round % 2 === 0) {
-                $winner.innerText = `${player1.getPlayerName()} won`;
-            } else {
-                $winner.innerText = `${player2.getPlayerName()} won`;
-            }
+        if (gameWon() && round % 2 === 0) {
+            $winner.innerText = `${player1.getPlayerName()} won`;
+            $roundAnnouncement.innerText = "";
+        } else if (gameWon() && !round % 2 === 0) {
+            $roundAnnouncement.innerText = "";
+            $winner.innerText = `${player2.getPlayerName()} won`;
         } else if (gameTie()) {
             $winner.innerText = "It's a tie";
-        } else {
-            console.log("no winner yet");
+            $roundAnnouncement.innerText = "";
         }
     };
 
     // Reset Game
     const $resetGame = document.querySelector(".reset-game");
-    $resetGame.addEventListener("click", (e) => {
+    const $resetGameBtn = document.querySelector(".reset-game-btn");
+    $resetGameBtn.addEventListener("click", (e) => {
+        round = 0;
+        $winner.innerText = "";
         for (let i = 0; i < gameBoard.getGameBoard().length; i++) {
             gameBoard.updateGameBoard(i, "");
-            round = 0;
-            $winner.innerText = "";
         }
     });
 
     // Create a new game (create players and gameBoard)
-    $newGameBtn.addEventListener("click", (e) => {
-        const $form = document.querySelector("form");
-        e.preventDefault();
-        player1 = player($player1.value);
-        player2 = player($player2.value);
-        display.createGameBoard();
-        $form.style.display = "none";
-        $resetGame.style.display = "block";
+    $newGameBtn.forEach((item) => {
+        item.addEventListener("click", (e) => {
+            console.log(e);
+            const $form = document.querySelector("form");
+            if (e.target.dataset.id === "0") {
+                e.preventDefault();
+                player1 = player($player1.value);
+                player2 = player($player2.value);
+                display.createGameBoard();
+                $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
+                $form.style.display = "none";
+                $resetGame.style.display = "block";
+            } else {
+                round = 0;
+                $winner.innerText = "";
+                for (let i = 0; i < gameBoard.getGameBoard().length; i++) {
+                    gameBoard.updateGameBoard(i, "");
+                }
+                player1 = null;
+                player2 = null;
+                display.deleteBoard();
+                $form.style.display = "flex";
+                $resetGame.style.display = "none";
+            }
+        });
     });
 
     // Cell click handler
@@ -101,9 +119,11 @@ const game = (() => {
         if (e.target.innerText === "" && $winner.innerText === "") {
             if (round % 2 === 0) {
                 gameBoard.updateGameBoard(e.target.dataset.id, "x");
+                $roundAnnouncement.textContent = `Is ${player2.getPlayerName()}'s turn (0)`;
                 checkWinner();
             } else {
                 gameBoard.updateGameBoard(e.target.dataset.id, "0");
+                $roundAnnouncement.textContent = `${player1.getPlayerName()}'s turn (X)`;
                 checkWinner();
             }
             round++;
@@ -125,11 +145,20 @@ const display = (() => {
             $gameBoard.appendChild($cell);
         }
     };
+
+    const deleteBoard = () => {
+        for (let i = 0; i < gameBoard.getGameBoard().length; i++) {
+            const $cell = document.querySelectorAll(".cell");
+            $cell.forEach((item) => {
+                item.remove();
+            });
+        }
+    };
     //update cell innerText(called when click on cell)
     const updateCells = () => {
         for (const child of $gameBoard.children) {
             child.innerText = gameBoard.getGameBoard()[child.dataset.id];
         }
     };
-    return { updateCells, createGameBoard };
+    return { updateCells, createGameBoard, deleteBoard };
 })();
