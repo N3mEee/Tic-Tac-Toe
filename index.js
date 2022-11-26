@@ -90,8 +90,12 @@ const game = (() => {
     $newGameBtn.forEach((item) => {
         item.addEventListener("click", (e) => {
             const $form = document.querySelector("form");
-            if (e.target.dataset.id === "0") {
+
+            if ($player1.value === "" || $player2.value === "") {
+                $roundAnnouncement.textContent = `Please enter a valide username`;
+            } else if (e.target.dataset.id === "0") {
                 e.preventDefault();
+
                 player1 = player($player1.value);
                 player2 = player($player2.value);
                 display.createGameBoard();
