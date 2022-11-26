@@ -3,6 +3,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    font-weight: 900;
     align-items: center;
 }
 
@@ -31,5 +32,36 @@ body {
 
 .cell:hover {
     transform: scale(1.1);
-    background-color: aliceblue;
+    background-color: violet;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+form input {
+    border: 1px solid grey;
+    border-radius: 5px;
+    outline-color: violet;
+}
+form label {
+    align-self: flex-start;
+}
+
+button {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-weight: 900;
+}
+
+button:hover {
+    background-color: violet;
+    color: white;
+}
+
+
+.reset-game {
+    display: none;
 }

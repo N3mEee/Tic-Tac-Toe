@@ -3,20 +3,16 @@
 // gameBoard module
 const gameBoard = (() => {
     let gameBoard = ["", "", "", "", "", "", "", "", ""];
-
     const valueAt = (position) => {
         return gameBoard[position];
     };
-
     const updateGameBoard = (position, value) => {
         gameBoard[position] = value;
-        displayGameBoard.updateCells();
+        display.updateCells();
     };
-
     const getGameBoard = () => {
         return gameBoard;
     };
-
     return { valueAt, getGameBoard, updateGameBoard };
 })();
 
@@ -26,16 +22,18 @@ const player = (name) => {
     const getPlayerName = () => {
         return playerName;
     };
-
     return { getPlayerName };
 };
 
 // game module
-const game = ((name1, name2) => {
+const game = (() => {
     const $gameBoard = document.querySelector(".gameBoard");
+    const $player1 = document.querySelector("#player1");
+    const $player2 = document.querySelector("#player2");
+    const $newGameBtn = document.querySelector(".new-game");
     const $winner = document.querySelector("h1");
-    const player1 = player(name1);
-    const player2 = player(name2);
+    let player1;
+    let player2;
     let round = 0;
 
     const checkWinner = () => {
@@ -49,7 +47,6 @@ const game = ((name1, name2) => {
             [0, 4, 8],
             [2, 4, 6],
         ];
-
         const gameWon = () => winnerCombos.some((combo) => allSameSymbol(combo));
         const gameTie = () => {
             if (!gameBoard.getGameBoard().includes("") && !gameWon()) {
@@ -76,9 +73,30 @@ const game = ((name1, name2) => {
         } else {
             console.log("no winner yet");
         }
-        return { gameWon, gameTie };
     };
 
+    // Reset Game
+    const $resetGame = document.querySelector(".reset-game");
+    $resetGame.addEventListener("click", (e) => {
+        for (let i = 0; i < gameBoard.getGameBoard().length; i++) {
+            gameBoard.updateGameBoard(i, "");
+            round = 0;
+            $winner.innerText = "";
+        }
+    });
+
+    // Create a new game (create players and gameBoard)
+    $newGameBtn.addEventListener("click", (e) => {
+        const $form = document.querySelector("form");
+        e.preventDefault();
+        player1 = player($player1.value);
+        player2 = player($player2.value);
+        display.createGameBoard();
+        $form.style.display = "none";
+        $resetGame.style.display = "block";
+    });
+
+    // Cell click handler
     $gameBoard.addEventListener("click", (e) => {
         if (e.target.innerText === "" && $winner.innerText === "") {
             if (round % 2 === 0) {
@@ -91,25 +109,27 @@ const game = ((name1, name2) => {
             round++;
         }
     });
-
     return { player1, player2, checkWinner };
-})("Marcel", "Caramel");
+})();
 
 // displayGameBoard module
-const displayGameBoard = (() => {
+const display = (() => {
     const $gameBoard = document.querySelector(".gameBoard");
-    for (let i = 0; i < gameBoard.getGameBoard().length; i++) {
-        const $cell = document.createElement("div");
-        $cell.setAttribute("class", "cell");
-        $cell.setAttribute("data-id", i);
-        $cell.textContent = gameBoard.getGameBoard()[i];
-        $gameBoard.appendChild($cell);
-    }
-
-    const updateCells = () => {
-        for (const child of $gameBoard.children) {
-            child.textContent = gameBoard.getGameBoard()[child.dataset.id];
+    //create and append the cells
+    const createGameBoard = () => {
+        for (let i = 0; i < gameBoard.getGameBoard().length; i++) {
+            const $cell = document.createElement("div");
+            $cell.setAttribute("class", "cell");
+            $cell.setAttribute("data-id", i);
+            $cell.innerText = gameBoard.getGameBoard()[i];
+            $gameBoard.appendChild($cell);
         }
     };
-    return { updateCells };
+    //update cell innerText(called when click on cell)
+    const updateCells = () => {
+        for (const child of $gameBoard.children) {
+            child.innerText = gameBoard.getGameBoard()[child.dataset.id];
+        }
+    };
+    return { updateCells, createGameBoard };
 })();
