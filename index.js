@@ -102,6 +102,15 @@ const game = (() => {
                 $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
                 $form.style.display = "none";
                 $resetGame.style.display = "block";
+            } else if (e.target.dataset.id === "1") {
+                e.preventDefault();
+
+                player1 = player($player1.value);
+                player2 = player("AI");
+                display.createGameBoard();
+                $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
+                $form.style.display = "none";
+                $resetGame.style.display = "block";
             } else {
                 round = 0;
                 $winner.innerText = "";
@@ -109,9 +118,9 @@ const game = (() => {
                     gameBoard.updateGameBoard(i, "");
                 }
                 player1 = null;
-                $player1.value = ""
+                $player1.value = "";
                 player2 = null;
-                $player2.value = ""
+                $player2.value = "";
                 display.deleteBoard();
                 $form.style.display = "flex";
                 $resetGame.style.display = "none";
@@ -126,12 +135,27 @@ const game = (() => {
                 gameBoard.updateGameBoard(e.target.dataset.id, "x");
                 $roundAnnouncement.textContent = `Is ${player2.getPlayerName()}'s turn (0)`;
                 checkWinner();
-            } else {
+                round++;
+                if (player2.getPlayerName() === "AI" && $winner.innerText === "") {
+                    let random = Math.floor(Math.random() * 9);
+                    for (let i = 0; i < 9; i++) {
+                        if (gameBoard.valueAt(random) === "") {
+                            i = 9;
+                        } else {
+                            random = Math.floor(Math.random() * 9);
+                        }
+                    }
+                    gameBoard.updateGameBoard(random, "0");
+                    $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
+                    checkWinner();
+                    round++;
+                }
+            } else if (!round % 2 === 0) {
                 gameBoard.updateGameBoard(e.target.dataset.id, "0");
                 $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
                 checkWinner();
+                round++;
             }
-            round++;
         }
     });
     return { player1, player2, checkWinner };
