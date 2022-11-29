@@ -36,6 +36,7 @@ const game = (() => {
     let player1;
     let player2;
     let round = 0;
+    let winnerLine = [];
 
     const checkWinner = () => {
         const winnerCombos = [
@@ -63,6 +64,24 @@ const game = (() => {
                 }
             });
         };
+
+        if (gameWon()) {
+            winnerLine = winnerCombos.find((combo) => {
+                return combo.every((item) => {
+                    if (round % 2 === 0) {
+                        return gameBoard.valueAt(item) === "x";
+                    } else {
+                        return gameBoard.valueAt(item) === "0";
+                    }
+                });
+            });
+            console.log(winnerLine);
+            winnerLine.forEach((item) => {
+                console.log(item);
+                $gameBoard.children[item].style.backgroundColor = "green";
+            });
+        }
+
         if (gameWon() && round % 2 === 0) {
             $winner.innerText = `${player1.getPlayerName()} won`;
             $roundAnnouncement.innerText = "";
@@ -83,6 +102,7 @@ const game = (() => {
         $winner.innerText = "";
         for (let i = 0; i < gameBoard.getGameBoard().length; i++) {
             gameBoard.updateGameBoard(i, "");
+            $gameBoard.children[i].style.backgroundColor = "";
         }
     });
 
