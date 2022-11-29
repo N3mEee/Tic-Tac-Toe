@@ -89,24 +89,22 @@ const game = (() => {
     // Create a new game (create players and gameBoard)
     $newGameBtn.forEach((item) => {
         item.addEventListener("click", (e) => {
+            e.preventDefault();
             const $form = document.querySelector("form");
-
-            if ($player1.value === "" || $player2.value === "") {
+            if ($player1.value === "") {
                 $roundAnnouncement.textContent = `Please enter a valide username`;
-            } else if (e.target.dataset.id === "0") {
-                e.preventDefault();
-
+            } else if (e.target.dataset.id === "1") {
                 player1 = player($player1.value);
-                player2 = player($player2.value);
+                player2 = player("AI");
                 display.createGameBoard();
                 $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
                 $form.style.display = "none";
                 $resetGame.style.display = "block";
-            } else if (e.target.dataset.id === "1") {
-                e.preventDefault();
-
+            } else if ($player1.value === "" || $player2.value === "") {
+                $roundAnnouncement.textContent = `Please enter a valide username`;
+            } else if (e.target.dataset.id === "0") {
                 player1 = player($player1.value);
-                player2 = player("AI");
+                player2 = player($player2.value);
                 display.createGameBoard();
                 $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
                 $form.style.display = "none";
@@ -130,7 +128,7 @@ const game = (() => {
 
     // Cell click handler
     $gameBoard.addEventListener("click", (e) => {
-        if (e.target.innerText === "" && $winner.innerText === "") {
+        if (e.target.innerText === "" && $winner.innerText === "" && e.target.classList.contains("cell")) {
             if (round % 2 === 0) {
                 gameBoard.updateGameBoard(e.target.dataset.id, "x");
                 $roundAnnouncement.textContent = `Is ${player2.getPlayerName()}'s turn (0)`;
