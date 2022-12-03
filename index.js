@@ -75,9 +75,7 @@ const game = (() => {
                     }
                 });
             });
-            console.log(winnerLine);
             winnerLine.forEach((item) => {
-                console.log(item);
                 $gameBoard.children[item].style.backgroundColor = "green";
             });
         }
@@ -111,24 +109,28 @@ const game = (() => {
         item.addEventListener("click", (e) => {
             e.preventDefault();
             const $form = document.querySelector("form");
-            if ($player1.value === "") {
-                $roundAnnouncement.textContent = `Please enter a valide username`;
-            } else if (e.target.dataset.id === "1") {
-                player1 = player($player1.value);
-                player2 = player("AI");
-                display.createGameBoard();
-                $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
-                $form.style.display = "none";
-                $resetGame.style.display = "block";
-            } else if ($player1.value === "" || $player2.value === "") {
-                $roundAnnouncement.textContent = `Please enter a valide username`;
+            if (e.target.dataset.id === "1") {
+                if ($player1.value === "") {
+                    $roundAnnouncement.textContent = `Please enter a valide username`;
+                } else {
+                    player1 = player($player1.value);
+                    player2 = player("AI");
+                    display.createGameBoard();
+                    $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
+                    $form.style.display = "none";
+                    $resetGame.style.display = "block";
+                }
             } else if (e.target.dataset.id === "0") {
-                player1 = player($player1.value);
-                player2 = player($player2.value);
-                display.createGameBoard();
-                $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
-                $form.style.display = "none";
-                $resetGame.style.display = "block";
+                if ($player1.value === "" || $player2.value === "") {
+                    $roundAnnouncement.textContent = `Please enter a valide username`;
+                } else {
+                    player1 = player($player1.value);
+                    player2 = player($player2.value);
+                    display.createGameBoard();
+                    $roundAnnouncement.textContent = `Is ${player1.getPlayerName()}'s turn (X)`;
+                    $form.style.display = "none";
+                    $resetGame.style.display = "block";
+                }
             } else {
                 round = 0;
                 $winner.innerText = "";
@@ -176,7 +178,6 @@ const game = (() => {
             }
         }
     });
-    return { player1, player2, checkWinner };
 })();
 
 // displayGameBoard module
