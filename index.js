@@ -140,7 +140,7 @@ const game = (() => {
                     $resetGame.style.display = "block";
                 }
             } //if the newgame button from lobby is clicked start a new game pvp
-            else if (e.target.dataset.id === "O") {
+            else if (e.target.dataset.id === "0") {
                 if ($player1.value === "" || $player2.value === "") {
                     $roundAnnouncement.textContent = `Please enter a valide username`;
                 } else {
