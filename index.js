@@ -192,7 +192,7 @@ const game = (() => {
                     round++;
                 } else if (player2.getPlayerName() === "GOD" && $winner.innerText === "") {
                     // this is the board flattened and filled with some values to easier asses the Artificial Inteligence.
-                    var origBoard = [];
+                    let origBoard = [];
                     for (let i = 0; i < gameBoard.getGameBoard().length; i++) {
                         if (gameBoard.valueAt(i) === "") {
                             origBoard.push(i);
@@ -202,19 +202,18 @@ const game = (() => {
                     }
 
                     // human
-                    var huPlayer = "x";
+                    const huPlayer = "x";
                     // ai
-                    var aiPlayer = "O";
+                    const aiPlayer = "O";
 
                     // keep track of function calls
-                    var fc = 0;
+                    let fc = 0;
 
                     // finding the ultimate play on the game that favors the computer
-                    var bestSpot = minimax(origBoard, aiPlayer);
+                    let bestSpot = minimax(origBoard, aiPlayer);
 
                     //loging the results
                     gameBoard.updateGameBoard(bestSpot.index, aiPlayer);
-                    console.log("function calls: " + fc);
 
                     // the main minimax function
                     function minimax(newBoard, player) {
@@ -222,7 +221,7 @@ const game = (() => {
                         fc++;
 
                         //available spots
-                        var availSpots = emptyIndexies(newBoard);
+                        let availSpots = emptyIndexies(newBoard);
 
                         // checks for the terminal states such as win, lose, and tie and returning a value accordingly
                         if (winning(newBoard, huPlayer)) {
@@ -234,12 +233,12 @@ const game = (() => {
                         }
 
                         // an array to collect all the objects
-                        var moves = [];
+                        let moves = [];
 
                         // loop through available spots
-                        for (var i = 0; i < availSpots.length; i++) {
+                        for (let i = 0; i < availSpots.length; i++) {
                             //create an object for each and store the index of that spot that was stored as a number in the object's index key
-                            var move = {};
+                            let move = {};
                             move.index = newBoard[availSpots[i]];
 
                             // set the empty spot to the current player
@@ -247,10 +246,10 @@ const game = (() => {
 
                             //if collect the score resulted from calling minimax on the opponent of the current player
                             if (player == aiPlayer) {
-                                var result = minimax(newBoard, huPlayer);
+                                let result = minimax(newBoard, huPlayer);
                                 move.score = result.score;
                             } else {
-                                var result = minimax(newBoard, aiPlayer);
+                                let result = minimax(newBoard, aiPlayer);
                                 move.score = result.score;
                             }
 
@@ -262,10 +261,10 @@ const game = (() => {
                         }
 
                         // if it is the computer's turn loop over the moves and choose the move with the highest score
-                        var bestMove;
+                        let bestMove;
                         if (player === aiPlayer) {
-                            var bestScore = -10000;
-                            for (var i = 0; i < moves.length; i++) {
+                            let bestScore = -10000;
+                            for (let i = 0; i < moves.length; i++) {
                                 if (moves[i].score > bestScore) {
                                     bestScore = moves[i].score;
                                     bestMove = i;
@@ -273,8 +272,8 @@ const game = (() => {
                             }
                         } else {
                             // else loop over the moves and choose the move with the lowest score
-                            var bestScore = 10000;
-                            for (var i = 0; i < moves.length; i++) {
+                            let bestScore = 10000;
+                            for (let i = 0; i < moves.length; i++) {
                                 if (moves[i].score < bestScore) {
                                     bestScore = moves[i].score;
                                     bestMove = i;
